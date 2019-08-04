@@ -1,0 +1,103 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<section>
+<div class="top">
+    <button
+    nz-button
+    nzType="danger"
+    nz-popconfirm
+    nzTitle="Are you sure delete this task?"
+    [nzCondition]="delSwitchValue"
+    (nzOnConfirm)="delSomeconfirm()"
+    nzPlacement="bottomRight"
+    >批量删除</button>
+    <div>
+        <nz-input-group [nzSuffix]="suffixIconSearch">
+            <input type="text" nz-input placeholder="input search text" />
+        </nz-input-group>
+        <ng-template #suffixIconSearch>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+    </div>
+    <button (click)="showModal()" nz-button nzType="primary" nzShape="circle"><i nz-icon nzType="plus" nzTheme="outline"></i></button>
+</div>
+<nz-table  
+[nzPageSize]="pageSize"
+[nzPageIndex]="pageIndex"
+ #basicTable
+[nzData]="listOfDisplayData"
+nzShowPagination
+nzShowSizeChanger
+[nzFrontPagination] = false
+[nzTotal] = "totalDataNum"
+(nzPageIndexChange) = "pageChange($event)"
+(nzCurrentPageDataChange) = "pageDataChange($event)"
+(nzPageSizeChange)="pageSizeChange($event)"
+>
+  <thead>
+    <tr>
+        <th class="del-checkbox"
+        nzShowCheckbox
+        [(nzChecked)]="isAllDisplayDataChecked"
+        [nzIndeterminate]="isIndeterminate"
+        (nzCheckedChange)="checkAll($event)"
+      >
+    </th>
+      <ng-container *ngFor="let item of tableCaptions">
+        <th *ngIf="item == primaryKey && !hideKey">{{primaryKey}}</th>
+        <th *ngIf="item!= primaryKey">{{ item }}</th>
+      </ng-container>
+      <!-- <th>Name</th>
+      <th>Age</th>
+      <th>Sex</th> -->
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of basicTable.data; let i = index">
+        <td
+        nzShowCheckbox
+        [(nzChecked)]="mapOfCheckedId[data[primaryKey]]"
+        (nzCheckedChange)="refreshStatus()"
+      ></td>
+    <ng-container *ngIf="!editCache[data[primaryKey]].edit;else editInp">
+      <ng-container  *ngFor="let item of tableCaptions">
+        <td *ngIf="item == primaryKey && !hideKey">{{data[primaryKey]}}</td>
+        <td *ngIf="item != primaryKey">{{ data[item] }}</td>
+      </ng-container>
+    </ng-container>
+      <ng-template #editInp>
+        <ng-container  *ngFor="let item of tableCaptions">
+          <td *ngIf="item == primaryKey && !hideKey">{{data[primaryKey]}}</td>
+          <td *ngIf="item != primaryKey">
+            <input type="text" nz-input [(ngModel)]="editCache[data[primaryKey]].data[item]" />
+          </td>
+        </ng-container>
+      </ng-template>
+      <!-- <td>{{ data.name }}</td>
+      <td>{{ data.age }}</td>
+      <td>{{ data.sex }}</td> -->
+      <td class="action">
+          <ng-container *ngIf="!editCache[data[primaryKey]].edit; else saveTpl">
+            <a (click)="startEdit(data[primaryKey])">Edit</a>
+            <nz-divider nzType="vertical"></nz-divider>
+            <a nz-popconfirm
+            nzTitle="确认删除吗？"
+            [nzIcon]="iconTpl"
+            nzOkType = "danger"
+            (nzOnCancel) = "cancelDel()"
+            (nzOnConfirm) = "confirmDel(data[primaryKey])"
+            >Delete</a>
+            <ng-template #iconTpl>
+              <i nz-icon nzType="question-circle-o" style="color: red;"></i>
+            </ng-template>
+          </ng-container>
+          <ng-template #saveTpl>
+            <a (click)="endEdit(data[primaryKey])">Save</a>
+            <nz-divider nzType="vertical"></nz-divider>
+            <a nz-popconfirm nzTitle="Sure to cancel?" (nzOnConfirm)="cancelEdit(data[primaryKey])">Cancel</a>
+          </ng-template>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+</section>

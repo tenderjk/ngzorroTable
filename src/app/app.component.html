@@ -1,46 +1,12 @@
 <!--The content below is only a placeholder and can be replaced.-->
-
-<nz-table  
-[nzPageSize]="pageSize"
- #basicTable
-[nzData]="listOfDisplayData"
-nzShowPagination
-nzShowSizeChanger
-[nzFrontPagination] = false
-[nzTotal] = 100
-(nzPageIndexChange) = "pageChange($event)"
->
-  <thead>
-    <tr>
-        <th
-        nzShowCheckbox
-        [(nzChecked)]="isAllDisplayDataChecked"
-        [nzIndeterminate]="isIndeterminate"
-        (nzCheckedChange)="checkAll($event)"
-      ></th>
-      <th>Name</th>
-      <th>Age</th>
-      <th>Address</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let data of basicTable.data">
-        <td
-        nzShowCheckbox
-        [(nzChecked)]="mapOfCheckedId[data.key]"
-        (nzCheckedChange)="refreshStatus()"
-      ></td>
-      <td>{{ data.name }}</td>
-      <td>{{ data.age }}</td>
-      <td>{{ data.address }}</td>
-      <td>
-        <a>Action 一 {{ data.name }}</a>
-        <nz-divider nzType="vertical"></nz-divider>
-        <a>Delete</a>
-      </td>
-    </tr>
-  </tbody>
-</nz-table>
-
-<router-outlet></router-outlet>
+<app-table
+pageIndex=1
+pageSize=5
+getUrl="http://127.0.0.1:5000/getdata"
+delUrl="http://127.0.0.1:5000/delete"
+insUrl="http://127.0.0.1:5000/adddata"
+updUrl="http://127.0.0.1:5000/update"
+primaryKey="id"
+[hideKey]=false
+[autoPrimaryKey]=true
+></app-table>

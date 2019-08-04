@@ -1,0 +1,14 @@
+<div class="inp-container">
+    <ng-container *ngFor="let item of columns">
+      <input  [(ngModel)]="modalData[item]" nz-input [name]="item" [placeholder]="item" />
+    </ng-container> 
+      <!-- <input type="text" name={{item}} /> -->
+    <!-- <p>Modal Content</p>
+    <p>Modal Content</p>
+    <p>Modal Content</p>
+    <p>Modal Content</p> -->
+</div>
+<div *nzModalFooter>
+  <button nz-button nzType="default" (click)="destroyModal()">取消</button>
+  <button nz-button nzType="primary" (click)="sendaData()">添加</button>
+</div>
